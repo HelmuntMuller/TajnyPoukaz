@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narozeninové překvapení pro Sojunku! 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-primary: #ff4081;
+            --pink-light: #fff0f5;
+            --pink-accent: #f06292;
+            --pink-soft: #fce4ec;
+            --text-dark: #37202b;
+            --border-pink: #f48fb1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #ffeef4 0%, #ffd6e7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-dark);
+            transition: background 0.5s ease;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 580px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 32px 28px;
+            box-shadow: 0 16px 36px rgba(233, 30, 99, 0.15);
+            border: 2px solid #ffccd9;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .top-icons {
+            font-size: 24px;
+            margin-bottom: 12px;
+            letter-spacing: 6px;
+        }
+
+        h1 {
+            font-family: 'Comfortaa', cursive;
+            color: #d81b60;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #884964;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffd1df;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: var(--pink-primary);
+            transform: scale(1.25);
+        }
+
+        .progress-dot.completed {
+            background: #4caf50;
+        }
+
+        /* Quiz & Auth Box */
+        .quiz-box {
+            background: var(--pink-light);
+            border: 1.5px dashed var(--border-pink);
+            border-radius: 20px;
+            padding: 22px 18px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .quiz-question {
+            font-weight: 800;
+            font-size: 16px;
+            color: #ad1457;
+            margin-bottom: 16px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 13px 18px;
+            margin: 10px 0;
+            background: #ffffff;
+            border: 2px solid #f8bbd0;
+            border-radius: 14px;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #4a152b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.35;
+        }
+
+        .option-btn:hover {
+            border-color: var(--pink-primary);
+            background: #fff5f8;
+            transform: translateY(-2px);
+        }
+
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Date Dropdowns Grid */
+        .date-select-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1.1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 13px 10px;
+            font-size: 15px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: #ad1457;
+            background: #ffffff;
+            border: 2px solid #f8bbd0;
+            border-radius: 14px;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23d81b60" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 28px;
+            text-align-last: center;
+        }
+
+        .custom-select:focus {
+            border-color: var(--pink-primary);
+            box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.15);
+        }
+
+        .custom-select:disabled {
+            background-color: #fce4ec;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .auth-submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 18px;
+            background: linear-gradient(90deg, #ff4081, #f06292);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.2);
+        }
+
+        .auth-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(233, 30, 99, 0.3);
+        }
+
+        .continue-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 18px;
+            margin-top: 14px;
+            background: linear-gradient(90deg, #43a047, #66bb6a);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(67, 160, 71, 0.25);
+            animation: bounceIn 0.5s ease;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(67, 160, 71, 0.35);
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            50% { transform: scale(1.03); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .feedback-msg {
+            margin-top: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            min-height: 22px;
+            text-align: center;
+        }
+
+        /* Biometric Verification Box */
+        .bio-photo-wrapper {
+            margin: 14px auto 16px auto;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--pink-primary);
+            box-shadow: 0 8px 24px rgba(233, 30, 99, 0.25);
+            position: relative;
+            background: #ffe4ee;
+        }
+
+        .bio-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bio-scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 64, 129, 0.85);
+            box-shadow: 0 0 10px #ff4081;
+            animation: scanAnim 2s infinite ease-in-out;
+        }
+
+        @keyframes scanAnim {
+            0% { top: 5%; }
+            50% { top: 90%; }
+            100% { top: 5%; }
+        }
+
+        .bio-btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .bio-btn {
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .bio-btn-yes {
+            background: linear-gradient(90deg, #43a047, #66bb6a);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(67, 160, 71, 0.25);
+        }
+
+        .bio-btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(67, 160, 71, 0.35);
+        }
+
+        .bio-btn-no {
+            background: linear-gradient(90deg, #e53935, #ef5350);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(229, 57, 53, 0.25);
+        }
+
+        .bio-btn-no:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(229, 57, 53, 0.35);
+        }
+
+        /* Screen Explosion / Destruct Styles */
+        .destruct-mode {
+            background: #0a0003 !important;
+        }
+
+        .destruct-card {
+            background: #1a0005 !important;
+            border-color: #ff1744 !important;
+            box-shadow: 0 0 50px rgba(255, 23, 68, 0.6) !important;
+            animation: redAlert 0.4s infinite alternate !important;
+        }
+
+        @keyframes redAlert {
+            0% { box-shadow: 0 0 20px rgba(255, 23, 68, 0.4); border-color: #b71c1c; }
+            100% { box-shadow: 0 0 60px rgba(255, 23, 68, 0.9); border-color: #ff1744; }
+        }
+
+        .destruct-title {
+            color: #ff1744 !important;
+            font-family: 'Comfortaa', cursive;
+            font-size: 22px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            animation: shake 0.2s infinite;
+        }
+
+        .destruct-countdown {
+            font-size: 80px;
+            font-weight: 900;
+            color: #ff1744;
+            text-shadow: 0 0 25px #ff1744;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-2px, 0px) rotate(-1deg); }
+            40% { transform: translate(2px, -1px) rotate(1deg); }
+            60% { transform: translate(-1px, 2px) rotate(0deg); }
+            80% { transform: translate(2px, 1px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(1deg); }
+        }
+
+        .blackout-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333333;
+            font-family: monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .blackout-glitch {
+            color: #ff1744;
+            font-size: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .retry-ghost-btn {
+            margin-top: 25px;
+            background: transparent;
+            border: 1px solid #222;
+            color: #444;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .retry-ghost-btn:hover {
+            color: #ff4081;
+            border-color: #ff4081;
+        }
+
+        /* Voucher Section */
+        #voucher-section {
+            display: none;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .badge-header {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff4081, #f06292);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .voucher-title {
+            font-family: 'Comfortaa', cursive;
+            font-size: 26px;
+            font-weight: 700;
+            color: #4a0d24;
+            margin-bottom: 6px;
+        }
+
+        .voucher-subtitle {
+            font-size: 14px;
+            color: #c2185b;
+            margin-bottom: 22px;
+            font-weight: 600;
+        }
+
+        .grid-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .grid-item {
+            background: #fff7fa;
+            border: 1px solid #ffd1df;
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .grid-item-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #d81b60;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .grid-item-value {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #2b0b18;
+            line-height: 1.35;
+        }
+
+        .vip-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #d81b60;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .perks-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .perks-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            color: #3b1424;
+        }
+
+        .perks-list li::before {
+            position: absolute;
+            left: 0;
+            top: 1px;
+            font-size: 16px;
+        }
+
+        .perks-list li.perk-ticket::before { content: "🌸"; }
+        .perks-list li.perk-car::before { content: "🚗"; }
+        .perks-list li.perk-bar::before { content: "🥂"; }
+        .perks-list li.perk-sing::before { content: "🎤"; }
+
+        .perk-bold {
+            font-weight: 800;
+            color: #200511;
+        }
+
+        .footer-greeting {
+            font-weight: 800;
+            font-size: 15px;
+            color: #e91e63;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #ffe0ea;
+        }
+
+        .btn-print {
+            background: #ffffff;
+            border: 1.5px solid #d81b60;
+            color: #d81b60;
+            padding: 9px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-print:hover {
+            background: #d81b60;
+            color: #ffffff;
+        }
+
+        @media (max-width: 480px) {
+            .grid-info {
+                grid-template-columns: 1fr;
+            }
+            .date-select-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .card-container {
+                padding: 24px 18px;
+            }
+            .voucher-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-container" id="main-card">
+
+    <!-- Step 0: Kontrola oslavence přes vyklikávátka -->
+    <div id="auth-section">
+        <div class="top-icons">🌸 🔐 🎂 🔐 🌸</div>
+        <h1>Kontrola oslavence! 🕵️‍♀️</h1>
+        <p class="subtitle">Tento obsah je chráněn narozeninovým protokolem.<br>Zvol datum narození pro ověření identity:</p>
+
+        <div class="quiz-box" style="text-align: center;">
+            <div class="quiz-question">🎂 Kdy má oslavenkyně narozeniny?</div>
+            
+            <div class="date-select-grid">
+                <!-- Den -->
+                <select id="select-day" class="custom-select">
+                    <option value="" disabled selected>Den</option>
+                </select>
+
+                <!-- Měsíc -->
+                <select id="select-month" class="custom-select">
+                    <option value="" disabled selected>Měsíc</option>
+                    <option value="1">Leden</option>
+                    <option value="2">Únor</option>
+                    <option value="3">Březen</option>
+                    <option value="4">Duben</option>
+                    <option value="5">Květen</option>
+                    <option value="6">Červen</option>
+                    <option value="7">Červenec</option>
+                    <option value="8">Srpen</option>
+                    <option value="9">Září</option>
+                    <option value="10">Říjen</option>
+                    <option value="11">Listopad</option>
+                    <option value="12">Prosinec</option>
+                </select>
+
+                <!-- Rok -->
+                <select id="select-year" class="custom-select">
+                    <option value="" disabled selected>Rok</option>
+                </select>
+            </div>
+
+            <button id="auth-btn" class="auth-submit-btn" onclick="verifyBirthday()">Ověřit totožnost ✨</button>
+            <button id="continue-btn" class="continue-btn" style="display: none;" onclick="goToQuiz()">Pokračovat k narozeninové prověrce ➡️</button>
+        </div>
+        <div id="auth-feedback" class="feedback-msg"></div>
+    </div>
+
+    <!-- Step 1-3: Quiz Step -->
+    <div id="quiz-section" style="display: none;">
+        <div class="top-icons">🌸 🌷 🌺 🌷 🌸</div>
+        <h1>Bezpečnostní prověrka! 🔒</h1>
+        <p class="subtitle" id="step-desc">Identita ověřena! Pro odemčení musíš projít 3 otázkami:</p>
+
+        <div class="progress-bar">
+            <div class="progress-dot active" id="dot-1"></div>
+            <div class="progress-dot" id="dot-2"></div>
+            <div class="progress-dot" id="dot-3"></div>
+            <div class="progress-dot" id="dot-4"></div>
+        </div>
+
+        <!-- Question 1 -->
+        <div id="q1-box" class="quiz-box">
+            <div class="quiz-question">1/3 🎶 Doplň slavný text: „Mám boky jako...“</div>
+            <button class="option-btn" onclick="wrongAnswer('A1')">A) ...šatní skříň z Ikey, co se skládala 4 hodiny 🛠️</button>
+            <button class="option-btn" onclick="wrongAnswer('B1')">B) ...dva lahváče v igelitce ze samoobsluhy 🍺</button>
+            <button class="option-btn" onclick="nextQuestion(1)">C) ...skříň, jako skříň, co naplat, když k tomu ráda jím 💃</button>
+        </div>
+
+        <!-- Question 2 -->
+        <div id="q2-box" class="quiz-box" style="display: none;">
+            <div class="quiz-question">2/3 🎤 Kterým mega hitem vtrhla Ewa v roce 2006 do rádií?</div>
+            <button class="option-btn" onclick="wrongAnswer('A2')">A) Být či nebýt 🎭</button>
+            <button class="option-btn" onclick="nextQuestion(2)">B) Měls mě vůbec rád 💔</button>
+            <button class="option-btn" onclick="wrongAnswer('C2')">C) Svět toalet 🎸</button>
+        </div>
+
+        <!-- Question 3 -->
+        <div id="q3-box" class="quiz-box" style="display: none;">
+            <div class="quiz-question">3/3 🍹 Co se stane, když oslavenkyni během parádního koncertu dojde pití?</div>
+            <button class="option-btn" onclick="wrongAnswer('A3')">A) Má smůlu, pije se jen teplá voda z kohoutku na záchodech 🚰</button>
+            <button class="option-btn" onclick="goToBiometrics()">B) Její doprovod sprintuje na bar s připravenou kartou! 💳</button>
+            <button class="option-btn" onclick="wrongAnswer('C3')">C) Musí počkat až na konec přídavku a tiše trpět ⏳</button>
+        </div>
+
+        <div id="feedback" class="feedback-msg"></div>
+    </div>
+
+    <!-- Step 4: Biometric Verification with Ewa Farna -->
+    <div id="bio-section" style="display: none;">
+        <div class="top-icons">🌸 📸 🔍 📸 🌸</div>
+        <h1>Biometrické ověření! 👁️</h1>
+        <p class="subtitle">Systém nalezl fotografii registrované VIP osoby v databázi.<br>Prosím potvrď shodu:</p>
+
+        <div class="quiz-box" style="text-align: center;">
+            <div class="bio-photo-wrapper">
+                <img src="princezna.jpg">
+                <div class="bio-scan-line"></div>
+            </div>
+
+            <div class="quiz-question" style="font-size: 17px; margin-bottom: 8px;">Jsi tato osoba? 🤔</div>
+            <p style="font-size: 13px; color: #884964; margin-bottom: 16px;">(Odpovídej podle pravdy, systém provádí sken)</p>
+
+            <div class="bio-btn-grid">
+                <button class="bio-btn bio-btn-yes" onclick="unlockVoucher()">ANO, to jsem já! 👑</button>
+                <button class="bio-btn bio-btn-no" onclick="triggerDestruction()">NE ❌</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Self-Destruct Warning Screen -->
+    <div id="destruct-section" style="display: none; text-align: center;">
+        <div class="top-icons">🚨 ⚠️ 💣 ⚠️ 🚨</div>
+        <div class="destruct-title">POPLACH: NEAUTORIZOVANÁ OSOBA DETEKOVÁNA!</div>
+        <p style="color: #ffcdd2; font-size: 15px; line-height: 1.4;">
+            Systém byl zkompromitován cizím narušitelem.<br>Probíhá nouzová destrukce všech dat...
+        </p>
+        <div id="destruct-timer" class="destruct-countdown">3</div>
+        <p style="color: #ef5350; font-size: 12px; font-weight: 700; letter-spacing: 1px;">KRYJTE SE!</p>
+    </div>
+
+    <!-- Voucher Result Step -->
+    <div id="voucher-section">
+        <div class="top-icons">🌸 🌷 🌺 🌸 🌺 🌷 🌸</div>
+        <div class="badge-header">DÁREČKOVÝ POUKAZUNEK</div>
+        <h2 class="voucher-title">Ewa Farna — Live Tour</h2>
+        <p class="voucher-subtitle">Vstupenka na nezapomenutelný hudební večer plný lásky (a sexu) ❤️</p>
+
+        <div class="grid-info">
+            <div class="grid-item">
+                <div class="grid-item-label">🌸 PRO KOHO</div>
+                <div class="grid-item-value">Nejúžasnější oslavenkyně<br><strong>Sojunka</strong></div>
+            </div>
+            <div class="grid-item">
+                <div class="grid-item-label">📍 KDY & KDE</div>
+                <div class="grid-item-value">Dle prvního ohlášeného turné v ČR</div>
+            </div>
+            <div class="grid-item">
+                <div class="grid-item-label">🎁 DÁRCE & DOPROVOD</div>
+                <div class="grid-item-value">Tvůj osobní řidič a láska<br>(nebo třeba kamarádka)</div>
+            </div>
+            <div class="grid-item">
+                <div class="grid-item-label">✨ PLATNOST</div>
+                <div class="grid-item-value">Neomezená<br>(lístky hlídá <strong>Vojunek!</strong>)</div>
+            </div>
+        </div>
+
+        <div class="vip-title">✨ CO VŠECHNO TENTO VIP BALÍČEK OBSAHUJE ✨</div>
+        <ul class="perks-list">
+            <li class="perk-ticket"><span class="perk-bold">2× prémiová vstupenka:</span> Výběr nejlepších míst (sezení nebo stání pod pódiem podle tvé chuti) hned v první minutě předprodeje.</li>
+            <li class="perk-car"><span class="perk-bold">Odvoz a servis:</span> Žádné starosti s parkováním nebo spoji – kompletní doprava tam i zpět jako pro princeznu 👑.</li>
+            <li class="perk-bar"><span class="perk-bold">Neomezený barový účet:</span> Všechny drinky, občerstvení a pochoutky během celého večera jdou na mě 🍹.</li>
+            <li class="perk-sing"><span class="perk-bold">České hity z plných plic:</span> Zpívání <em>Boky jako skříň</em> nebo <em>Měls mě vůbec rád</em> bez remcání (jinak trest).</li>
+        </ul>
+
+        <div class="footer-greeting">
+            🌸 Všechno nejlepší k narozeninám! 🌸
+        </div>
+
+        <button class="btn-print" onclick="window.print()">🖨️ Vytisknout / Uložit voucher</button>
+    </div>
+</div>
+
+<script>
+    // Populate Day and Year dropdowns
+    const daySelect = document.getElementById('select-day');
+    for (let d = 1; d <= 31; d++) {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.innerText = d + '.';
+        daySelect.appendChild(opt);
+    }
+
+    const yearSelect = document.getElementById('select-year');
+    for (let y = 2010; y >= 1985; y--) {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.innerText = y;
+        yearSelect.appendChild(opt);
+    }
+
+    function verifyBirthday() {
+        const day = document.getElementById('select-day').value;
+        const month = document.getElementById('select-month').value;
+        const year = document.getElementById('select-year').value;
+        const feedback = document.getElementById('auth-feedback');
+        const authBtn = document.getElementById('auth-btn');
+        const continueBtn = document.getElementById('continue-btn');
+
+        if (!day || !month || !year) {
+            feedback.innerText = '⚠️ Vyber prosím den, měsíc i rok!';
+            feedback.style.color = '#d81b60';
+            return;
+        }
+
+        // Check for 3. 9. 2002
+        if (day === '3' && month === '9' && year === '2002') {
+            feedback.innerText = '🔓 Totožnost potvrzena! Vítej, oslavenkyně Sojunko! 🎉';
+            feedback.style.color = '#2e7d32';
+
+            document.getElementById('select-day').disabled = true;
+            document.getElementById('select-month').disabled = true;
+            document.getElementById('select-year').disabled = true;
+            authBtn.style.display = 'none';
+            continueBtn.style.display = 'block';
+
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.6 }
+            });
+        } else {
+            feedback.innerText = '❌ Neplatné datum! Že by se někdo pokoušel vloupat k dárku? Zkus to znovu!';
+            feedback.style.color = '#d81b60';
+        }
+    }
+
+    function goToQuiz() {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('quiz-section').style.display = 'block';
+    }
+
+    function wrongAnswer(tag) {
+        const feedback = document.getElementById('feedback');
+        feedback.style.color = '#d81b60';
+
+        switch(tag) {
+            case 'A1':
+                feedback.innerText = '❌ Vedle! I když to byla fuška, tohle Ewa nezpívá.';
+                break;
+            case 'B1':
+                feedback.innerText = '❌ Chyba! Lahváče nech Ozzákovi, zkus to ještě jednou!';
+                break;
+            case 'A2':
+                feedback.innerText = '❌ Těsně vedle, tohle přišlo až o kousek později!';
+                break;
+            case 'C2':
+                feedback.innerText = '❌ Kéž by! Tohle nazpívala lepší kapela 🐹';
+                break;
+            case 'A3':
+                feedback.innerText = '❌ Záchodovou vodu rozhodně ne! Dneska jsi princezna, zkus to znova!';
+                break;
+            case 'C3':
+                feedback.innerText = '❌ Trpět? V žádném případě! Zkus druhou možnost.';
+                break;
+        }
+    }
+
+    function nextQuestion(currentStep) {
+        const feedback = document.getElementById('feedback');
+        feedback.innerText = '✨ Paráda! Jdeme dál...';
+        feedback.style.color = '#2e7d32';
+
+        setTimeout(() => {
+            feedback.innerText = '';
+            if (currentStep === 1) {
+                document.getElementById('q1-box').style.display = 'none';
+                document.getElementById('q2-box').style.display = 'block';
+                document.getElementById('dot-1').className = 'progress-dot completed';
+                document.getElementById('dot-2').className = 'progress-dot active';
+            } else if (currentStep === 2) {
+                document.getElementById('q2-box').style.display = 'none';
+                document.getElementById('q3-box').style.display = 'block';
+                document.getElementById('dot-2').className = 'progress-dot completed';
+                document.getElementById('dot-3').className = 'progress-dot active';
+            }
+        }, 500);
+    }
+
+    function goToBiometrics() {
+        const feedback = document.getElementById('feedback');
+        feedback.innerText = '✨ 3/3 správně! Přejímám biometrická data...';
+        feedback.style.color = '#2e7d32';
+
+        document.getElementById('dot-3').className = 'progress-dot completed';
+        document.getElementById('dot-4').className = 'progress-dot active';
+
+        setTimeout(() => {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('bio-section').style.display = 'block';
+        }, 700);
+    }
+
+    function unlockVoucher() {
+        document.getElementById('dot-4').className = 'progress-dot completed';
+
+        confetti({
+            particleCount: 120,
+            spread: 75,
+            origin: { y: 0.6 }
+        });
+
+        document.getElementById('bio-section').style.display = 'none';
+        document.getElementById('voucher-section').style.display = 'block';
+
+        setTimeout(() => {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.5 },
+                colors: ['#ff4081', '#f06292', '#f8bbd0', '#ffd54f']
+            });
+        }, 300);
+    }
+
+    function triggerDestruction() {
+        document.getElementById('bio-section').style.display = 'none';
+        document.getElementById('destruct-section').style.display = 'block';
+        
+        document.body.classList.add('destruct-mode');
+        document.getElementById('main-card').classList.add('destruct-card');
+
+        let count = 3;
+        const timerEl = document.getElementById('destruct-timer');
+
+        const countdownInterval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                timerEl.innerText = count;
+            } else {
+                clearInterval(countdownInterval);
+                timerEl.innerText = '💥 BUM!';
+
+                // Blast of dark red spark confetti & Blackout
+                confetti({
+                    particleCount: 200,
+                    spread: 120,
+                    origin: { y: 0.5 },
+                    colors: ['#ff1744', '#b71c1c', '#000000', '#ff5252']
+                });
+
+                setTimeout(() => {
+                    // Create total blackout overlay
+                    const blackout = document.createElement('div');
+                    blackout.className = 'blackout-screen';
+                    blackout.innerHTML = `
+                        <div class="blackout-glitch">[ SYSTÉM ZNIČEN ]</div>
+                        <p style="color: #666; font-size: 14px; max-width: 320px;">
+                            Byl zjištěn nepovolaný vetřelec. Veškerá narozeninová překvapení byla preventivně odpálena do vzduchu.
+                        </p>
+                        <button class="retry-ghost-btn" onclick="location.reload()">[ Zkusit znovu jako Sojunka ]</button>
+                    `;
+                    document.body.appendChild(blackout);
+                }, 700);
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>
